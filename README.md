@@ -1,0 +1,1 @@
+# BurpSuite-Exclude-From-Scope
