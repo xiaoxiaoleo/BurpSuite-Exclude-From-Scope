@@ -23,3 +23,6 @@
 hs_err_pid*
 .idea/modules.xml
 .idea/jarRepositories.xml
+*.bin
+*.lock
+*.lock

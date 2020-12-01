@@ -11,14 +11,14 @@ import java.util.Map;
 import javax.swing.JMenuItem;
 
 
-public class BurpExtender implements IBurpExtender, IContextMenuFactory {
+public class BurpExtender implements IBurpExtender, IContextMenuFactory, IHttpListener  {
 
     private IBurpExtenderCallbacks callbacks;
     private static PrintWriter stdout;
     private static boolean isEnable = true;
     IExtensionHelpers helpers = null;
 
-    protected static String E_TOP_DOMIAIN = "Exclude Top Domain From Scope";
+    protected static String I_S_DOMIAIN = "Include Second-Level Domain to Scope";
     protected static String E_CUR_DOMIAIN = "Exclude Current Domain From Scope";
     protected static String E_CUR_URL = "Exclude Current URL From Scope";
 
@@ -36,6 +36,8 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory {
         stdout.println("Repo: https://github.com/xiaoxiaoleo/BurpSuite-Exclude-From-Scope");
 
         callbacks.registerContextMenuFactory(BurpExtender.this);
+        callbacks.registerHttpListener(this);
+
     }
 
     @Override
@@ -47,12 +49,38 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory {
                 //String topDomain = iURL.getHost().split(".")[-2].concat(".").concat(iURL.getHost().split(".")[-1]);
 
                 List<JMenuItem> menu = new ArrayList<JMenuItem>();
-                //JMenuItem jItem1 = new JMenuItem(E_TOP_DOMIAIN + ": " + iURL.toString());
+                JMenuItem jItem1 = new JMenuItem(I_S_DOMIAIN);
                 JMenuItem jItem2 = new JMenuItem(E_CUR_DOMIAIN);
                 //JMenuItem jItem3 = new JMenuItem(E_CUR_URL + ": " + iURL.toString());
-                //menu.add(jItem1);
+                menu.add(jItem1);
                 menu.add(jItem2);
                 //menu.add(jItem3);
+                jItem1.addActionListener(new ActionListener(){
+
+                    public void actionPerformed(ActionEvent arg0) {
+                        IHttpRequestResponse req = invocation.getSelectedMessages()[0];
+                        IRequestInfo request = helpers.analyzeRequest(req.getRequest());
+                        String host = "fail.get.host";
+                        for(String headLine : request.getHeaders()){
+                            if (headLine.toLowerCase().startsWith("host")){
+                                host = headLine.split(": ")[1];
+                            }
+
+                        }
+
+                        String curDomain = "https" + "://"+ host;
+                        String curDomainHTTP = "http" + "://"+ host;
+                        URL url, urlHTTP;
+                        try {
+                            url = new URL(curDomain);
+                            callbacks.includeInScope(url);
+                            urlHTTP = new URL(curDomainHTTP);
+                            callbacks.includeInScope(urlHTTP);
+                        } catch (MalformedURLException ex) {
+
+                        }
+                    }
+                });
 
                 jItem2.addActionListener(new ActionListener(){
 
@@ -88,6 +116,25 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory {
         }
         return null;
     }
+
+    @Override
+    public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse messageInfo){
+      /*    if(messageIsRequest) {
+            return;
+        }
+
+      IRequestInfo requestInfo = helpers.analyzeRequest(messageInfo.getRequest());
+        if(!requestInfo.headers.get(0)!!.startsWith("OPTIONS")) {
+            return
+        }
+
+        val response = messageInfo.response
+        val responseInfo = cb.helpers.analyzeResponse(response)
+        val headers = responseInfo.headers
+        headers.add("Content-Type: application/octet-stream")
+        messageInfo.response = cb.helpers.buildHttpMessage(headers, response.copyOfRange(responseInfo.bodyOffset, response.size))
+*/    }
+
 
 /*
     @Override
