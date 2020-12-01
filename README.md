@@ -4,7 +4,7 @@
 
 - #### 选中history一条纪录添加：
 
-![](https://github.com/xiaoxiaoleo/BurpSuite-Exclude-From-Scope/raw/main/screenshot/add.png)
+![](https://github.com/xiaoxiaoleo/BurpSuite-Exclude-From-Scope/raw/main/screenshot/add2.png)
 
 - #### 查看scope看效果：
 
