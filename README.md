@@ -13,4 +13,4 @@
 
 - #### 下载
 
-[download](https://github.com/xiaoxiaoleo/BurpSuite-Exclude-From-Scope)
+[download](https://github.com/xiaoxiaoleo/BurpSuite-Exclude-From-Scope/releases)
