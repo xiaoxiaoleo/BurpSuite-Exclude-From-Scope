@@ -1,6 +1,6 @@
 # BurpSuite-Exclude-From-Scope
 
-### 添加当前域名到out-scope里面。
+### 添加当前域名到in-scope里面。
 
 - #### 选中history一条纪录添加：
 
